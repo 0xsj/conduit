@@ -4,22 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.AddVacationActivity"
-    android:padding="32dp"
-    >
+    android:padding="10dp"
+    tools:context=".activities.AddVacationActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:ignore="MissingConstraints">
+
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/vacation_tracker"
+            android:text="Vacation Tracker"
             android:textAlignment="center"
-            android:textSize="33sp"
+            android:textSize="33dp"
             android:layout_margin="40dp"/>
 
     </LinearLayout>
@@ -32,39 +31,35 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="ExtraText">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <EditText
-            android:id="@+id/editTextVacationTitle"
+            android:id="@+id/editTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/enter_vacation_title"
+            android:hint="Enter Vacation Title"
             android:inputType="text"/>
 
         <EditText
-            android:id="@+id/editTextHotel"
+            android:id="@+id/editHotel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/enter_hotel_name"
+            android:hint="Enter Hotel Name"
             android:inputType="text"/>
 
         <EditText
-            android:id="@+id/editTextStartDate"
+            android:id="@+id/editStartDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/start_date"
-            android:focusable="false"
-            android:inputType="date"/>
+            android:hint="Pick Start Date"
+            android:focusable="false"/>
 
         <EditText
-            android:id="@+id/editTextEndDate"
+            android:id="@+id/editEndDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/end_date"
-            android:focusable="false"
-            android:inputType="date"/>
-
+            android:hint="Pick End Date"
+            android:focusable="false"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,21 +68,47 @@
             android:gravity="center_horizontal">
 
             <Button
-                android:id="@+id/buttonSaveVacation"
+                android:id="@+id/saveVacation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/save"/>
+                android:layout_marginEnd="8dp"
+                android:text="Save Vacation"/>
 
             <Button
-                android:id="@+id/buttonViewVacations"
+                android:id="@+id/viewVacations"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/view"/>
+                android:layout_marginEnd="8dp"
+                android:text="View Vacations"/>
 
         </LinearLayout>
-<!--        perhaps additional buttons to clear-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/setAlert"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="Set Alerts"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="reset"
+                android:onClick="clearFields"/>
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

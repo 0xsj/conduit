@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:padding="32dp"
-    >
+    android:orientation="vertical"
+    android:padding="16dp">
 
+    <!-- EditText for Excursion Title -->
     <EditText
         android:id="@+id/editTextExcursionTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_excursion_title"
+        android:hint="Enter Excursion Title"
         android:inputType="textCapWords"
         android:maxLength="50"
-        android:padding="12dp"
-        android:autofillHints="" />
+        android:padding="12dp"/>
 
+    <!-- EditText for Excursion Date -->
     <EditText
         android:id="@+id/editTextExcursionDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_date_mm_dd_yyyy"
+        android:hint="Enter Date (MM/dd/yyyy)"
         android:focusable="false"
-        android:padding="12dp"
-        android:autofillHints="" />
+        android:padding="12dp" />
 
+    <!-- Save Button -->
     <Button
         android:id="@+id/buttonSaveExcursion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/save_excursion"
+        android:text="Save Excursion"
         android:layout_gravity="center_horizontal"
         android:padding="12dp"
         android:layout_marginTop="24dp"/>
-
 
 </LinearLayout>
