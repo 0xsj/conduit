@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">conduit</string>
+    <string name="excursions">Excursions</string>
+    <string name="enter_date_mm_dd_yyyy">Enter Date (MM/dd/yyyy)</string>
+    <string name="enter_excursion_title">Enter Excursion Title</string>
+    <string name="save_excursion">Save Excursion</string>
+    <string name="vacation_details">Vacation Details</string>
+    <string name="vacation">Vacation</string>
+    <string name="vacation_tracker">Vacation Tracker</string>
+    <string name="enter_vacation_title">Enter Vacation Title</string>
+    <string name="enter_hotel_name">Enter Hotel Name</string>
+    <string name="pick_start_date">Pick Start Date</string>
+    <string name="pick_end_date">Pick End Date</string>
+    <string name="start_date" />
+    <string name="end_date" />
+    <string name="save_vacation">Save Vacation</string>
+    <string name="save">save</string>
+    <string name="view">View</string>
 </resources>
