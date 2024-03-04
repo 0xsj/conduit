@@ -1,10 +1,8 @@
 package com.example.conduit.activities;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -75,9 +73,6 @@ public class AddVacationActivity extends AppCompatActivity {
 
     private void onSetAlarmForVacation() {}
 
-    private void onShowDatePickerDialog() {
-    }
-
     private void onShowNoChangesMade() {}
 
     private void onShowSaveSuccess() {}
@@ -89,9 +84,6 @@ public class AddVacationActivity extends AppCompatActivity {
     private void onSaveVacation() {}
 
     private void onLoadVacationDetails() {}
-
-    private void showDatePickerDialog() {
-    }
 
     private boolean onValidateInput() {
         return false;
