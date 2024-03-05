@@ -1,6 +1,8 @@
 package com.example.conduit.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.conduit.R;
 import com.example.conduit.database.AppDatabase;
+import com.example.conduit.entities.Vacation;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,6 +19,7 @@ import java.util.Locale;
 
 public class AddVacationActivity extends AppCompatActivity {
     private EditText editTitle, editHotel, editStartDate, editEndDate;
+    private Vacation currentVacation;
 
     private AppDatabase db;
 
@@ -60,7 +64,13 @@ public class AddVacationActivity extends AppCompatActivity {
         });
     }
 
-    private void onAddEventToCalendar() {}
+    private void onAddEventToCalendar(Vacation vacation) {
+        Intent intent = new Intent(Intent.ACTION_INSERT);
+        intent.setData(CalendarContract.Events.CONTENT_URI);
+        intent.putExtra(CalendarContract.Events.TITLE, vacation.getTitle() + "Vacation");
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, "Vacation Hotel: " + vacation.getHotel());
+
+    }
 
     private void onClearFields() {}
 

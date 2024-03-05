@@ -5,11 +5,17 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DateTime {
+    private static final Logger logger = Logger.getLogger(DateTime.class.getName());
+
     public static void showDatePickerDialog(EditText editText, AppCompatActivity activity) {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -29,5 +35,16 @@ public class DateTime {
         );
 
         datePickerDialog.show();
+    }
+
+    public long convertDateToMilliseconds(String dateStr) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        try {
+            Date date = simpleDateFormat.parse(dateStr);
+            return date != null ? date.getTime() : 0;
+        } catch (ParseException err) {
+            logger.log(Level.SEVERE, "Error parsing date string: " + dateStr, err);
+            return 0;
+        }
     }
 }
