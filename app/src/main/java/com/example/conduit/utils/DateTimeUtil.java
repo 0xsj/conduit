@@ -13,8 +13,8 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DateTime {
-    private static final Logger logger = Logger.getLogger(DateTime.class.getName());
+public class DateTimeUtil {
+    private static final Logger logger = Logger.getLogger(DateTimeUtil.class.getName());
 
     public static void showDatePickerDialog(EditText editText, AppCompatActivity activity) {
         Calendar calendar = Calendar.getInstance();
@@ -37,7 +37,7 @@ public class DateTime {
         datePickerDialog.show();
     }
 
-    public long convertDateToMilliseconds(String dateStr) {
+    public static long convertDateToMilliseconds(String dateStr) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
         try {
             Date date = simpleDateFormat.parse(dateStr);

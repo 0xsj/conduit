@@ -16,7 +16,9 @@ public class VacationActivity extends AppCompatActivity {
     private Vacation currentVacation;
 
     @Override
-    protected void onCreate(Bundle savedInstance) {}
+    protected void onCreate(Bundle savedInstance) {
+        super.onCreate(savedInstance);
+    }
 
     public void initViews() {}
     public void initEventHandlers() {}
@@ -32,7 +34,9 @@ public class VacationActivity extends AppCompatActivity {
 
     public void onViewExcursionsClicked() {}
 
-    protected void onDestroy() {}
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     private void loadVacations() {}
 

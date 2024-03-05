@@ -14,14 +14,11 @@ import com.example.conduit.entities.Vacation;
 
 @Dao
 public interface VacationDao {
-    @Query("SELECT * FROM vacations")
-    LiveData<List<Vacation>> getAllVacationsAsync();
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(Vacation vacation);
 
     @Update
-    void update(Vacation vacation);
+    int update(Vacation vacation);
 
     @Delete
     void delete(Vacation vacation);
@@ -31,7 +28,4 @@ public interface VacationDao {
 
     @Query("SELECT * FROM vacations")
     List<Vacation> getAllVacations();
-
-    @Query("SELECT * FROM vacations WHERE id = :vacationId")
-    Vacation getVacationByIdSync(int vacationId);
 }
