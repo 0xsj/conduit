@@ -21,7 +21,9 @@ public class UpdateExcursionActivity extends AppCompatActivity {
     private Executor executor;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {}
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
     private void initEventHandlers() {}
 
     private void initViews() {}
