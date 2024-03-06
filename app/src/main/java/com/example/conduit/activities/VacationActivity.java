@@ -14,14 +14,12 @@ import com.example.conduit.adapter.VacationAdapter;
 import com.example.conduit.database.AppDatabase;
 import com.example.conduit.entities.Vacation;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class VacationActivity extends AppCompatActivity implements VacationAdapter.OnVacationListener {
-    private RecyclerView recyclerView;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     private VacationAdapter adapter;
@@ -36,7 +34,7 @@ public class VacationActivity extends AppCompatActivity implements VacationAdapt
     }
 
     public void initViews() {
-        recyclerView = findViewById(R.id.recyclerViewVacations);
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewVacations);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         if (adapter == null) {
             adapter = new VacationAdapter(new ArrayList<>(), this);
@@ -54,9 +52,7 @@ public class VacationActivity extends AppCompatActivity implements VacationAdapt
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setTitle("Edit Vacation")
                 .setMessage("Confirm edit")
-                .setPositiveButton("Yes", (dialog, which) -> {
-                    onEditVacation(vacation);
-                })
+                .setPositiveButton("Yes", (dialog, which) -> onEditVacation(vacation))
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .create();
     }
