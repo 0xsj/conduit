@@ -1,5 +1,6 @@
 package com.example.conduit.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,16 +27,20 @@ public class VacationAdapter extends RecyclerView.Adapter<VacationAdapter.Vacati
     @NonNull
     @Override
     public VacationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d("VacationAdapter", "onCreateViewHolder: Creating new ViewHolder");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.vacation_item, parent, false);
-        return new VacationViewHolder(view);
+        return new VacationViewHolder(view, onVacationListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull VacationViewHolder holder, int position) {
         if (position >= 0 && position < vacations.size()) {
-            holder.bind(vacations.get(position), onVacationListener);
+            Vacation vacation = vacations.get(position);
+            Log.d("VacationAdapter", "onBindViewHolder: Binding data for position " + position + ", Title: " + vacation.getTitle());
+            holder.bind(vacation, onVacationListener);
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -46,7 +51,7 @@ public class VacationAdapter extends RecyclerView.Adapter<VacationAdapter.Vacati
         TextView textViewTitle, textViewHotel, textViewStartDate, textViewEndDate;
         Button editButton, deleteButton, shareButton, addButton, viewButton;
 
-        VacationViewHolder(View itemView) {
+        VacationViewHolder(View itemView, OnVacationListener listener) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.textViewVacationTitle);
             textViewHotel = itemView.findViewById(R.id.textViewHotel);
@@ -66,17 +71,33 @@ public class VacationAdapter extends RecyclerView.Adapter<VacationAdapter.Vacati
             textViewStartDate.setText(vacation.getStartDate());
             textViewEndDate.setText(vacation.getEndDate());
 
-            viewButton.setOnClickListener(v -> listener.onViewExcursionsClicked(vacation));
-            addButton.setOnClickListener(v -> listener.onAddExcursionsClicked(vacation));
-            editButton.setOnClickListener(v -> listener.onEditClicked(vacation));
-            deleteButton.setOnClickListener(v -> listener.onDeleteClicked(vacation));
-            shareButton.setOnClickListener(v -> listener.onShareClicked(vacation));
+            viewButton.setOnClickListener(v -> {
+                Log.d("VacationAdapter", "View Button clicked for vacation: " + vacation.getTitle());
+                listener.onViewExcursionsClicked(vacation);
+            });
+            addButton.setOnClickListener(v -> {
+                Log.d("VacationAdapter", "Add Button clicked for vacation: " + vacation.getTitle());
+                listener.onAddExcursionsClicked(vacation);
+            });
+            editButton.setOnClickListener(v -> {
+                Log.d("VacationAdapter", "Edit Button clicked for vacation: " + vacation.getTitle());
+                listener.onEditClicked(vacation);
+            });
+            deleteButton.setOnClickListener(v -> {
+                Log.d("VacationAdapter", "Delete Button clicked for vacation: " + vacation.getTitle());
+                listener.onDeleteClicked(vacation);
+            });
+            shareButton.setOnClickListener(v -> {
+                Log.d("VacationAdapter", "Share Button clicked for vacation: " + vacation.getTitle());
+                listener.onShareClicked(vacation);
+            });
         }
     }
 
     public void setVacations(List<Vacation> vacations) {
         this.vacations = vacations;
         notifyDataSetChanged();
+        Log.d("VacationAdapter", "Adapter updated with " + getItemCount() + " items");
     }
 
     public interface OnVacationListener {

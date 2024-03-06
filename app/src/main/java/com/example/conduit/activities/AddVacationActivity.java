@@ -28,13 +28,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class AddVacationActivity extends AppCompatActivity {
     private EditText editTitle, editHotel, editStartDate, editEndDate;
     private Vacation currentVacation;
 
-    private final Executor executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private AppDatabase db;
 
     @Override
@@ -44,6 +45,12 @@ public class AddVacationActivity extends AppCompatActivity {
         db = AppDatabase.getDatabase(getApplicationContext());
         initViews();
         initEventHandlers();
+
+        // check db conn
+        List<Vacation> vacations = db.vacationDao().getAllVacations();
+        for (Vacation vacation : vacations) {
+            Log.d("ViewVacations", "Vacation: " + vacation.getTitle() + ", Hotel: " + vacation.getHotel() + ", Start Date: " + vacation.getStartDate() + ", End Date: " + vacation.getEndDate());
+        }
     }
 
     private void initViews() {
@@ -63,11 +70,10 @@ public class AddVacationActivity extends AppCompatActivity {
 
         Button viewVacationButton = findViewById(R.id.viewVacations);
         viewVacationButton.setOnClickListener(v -> {
-//            List<Vacation> vacations = db.vacationDao().getAllVacations();
-//            for (Vacation vacation : vacations) {
-//                Log.d("ViewVacations", "Vacation: " + vacation.getTitle() + ", Hotel: " + vacation.getHotel() + ", Start Date: " + vacation.getStartDate() + ", End Date: " + vacation.getEndDate());
-//            }
+            Intent intent = new Intent(AddVacationActivity.this, VacationActivity.class);
+            startActivity(intent);
         });
+
 
         Button setAlertButton = findViewById(R.id.setAlert);
         setAlertButton.setOnClickListener(v -> {
@@ -82,12 +88,12 @@ public class AddVacationActivity extends AppCompatActivity {
             }
         });
 
-//        if (getIntent().hasExtra("vacationId")) {
-//            int vacationId = getIntent().getIntExtra("vacationId", -1);
-//            if (vacationId != -1) {
-//                onLoadVacationDetails(vacationId);
-//            }
-//        }
+        if (getIntent().hasExtra("vacationId")) {
+            int vacationId = getIntent().getIntExtra("vacationId", -1);
+            if (vacationId != -1) {
+                onLoadVacationDetails(vacationId);
+            }
+        }
     }
 
     private void onAddEventToCalendar(Vacation vacation) {
@@ -200,13 +206,18 @@ public class AddVacationActivity extends AppCompatActivity {
     }
 
 
+
     private void onLoadVacationDetails(int vacationId) {
-        db.vacationDao().getVacationByIdAsync(vacationId).observe(this, vacation -> {
-            if (vacation != null) {
-                onUpdateUIVacationDetails(vacation);
-            } else {
-                Toast.makeText(AddVacationActivity.this, "Vacation not found.", Toast.LENGTH_SHORT).show();
-            }
+        executor.execute(() -> {
+            db.vacationDao().getVacationByIdAsync(vacationId).observe(this, vacation -> {
+                if (vacation != null) {
+                    runOnUiThread(() -> {
+                        onUpdateUIVacationDetails(vacation);
+                    });
+                } else {
+                    Toast.makeText(AddVacationActivity.this, "Vacation not found.", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
     }
 
