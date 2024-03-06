@@ -16,4 +16,12 @@
     <string name="save_vacation">Save Vacation</string>
     <string name="save">save</string>
     <string name="view">View</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="share">Share</string>
+    <string name="add_excursion">Add Excursion</string>
+    <string name="view_excursions">View Excursions</string>
+    <string name="view_vacations">View Vacations</string>
+    <string name="reset">reset</string>
+    <string name="set_alerts">Set Alerts</string>
 </resources>

@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:text="Vacation Tracker"
             android:textAlignment="center"
-            android:textSize="33dp"
+            android:textSize="33sp"
             android:layout_margin="40dp"/>
 
     </LinearLayout>
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                android:text="View Vacations"/>
+                android:text="@string/view_vacations"/>
 
         </LinearLayout>
         <LinearLayout
@@ -97,13 +97,13 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                android:text="Set Alerts"/>
+                android:text="@string/set_alerts"/>
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                android:text="reset"
+                android:text="@string/reset"
                 android:onClick="clearFields"/>
 
         </LinearLayout>
