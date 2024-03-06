@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.conduit.R;
+import com.example.conduit.adapter.ExcursionAdapter;
 import com.example.conduit.entities.Excursion;
 
 import java.util.Calendar;
@@ -16,6 +17,7 @@ import java.util.concurrent.Executors;
 public class ExcursionActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private ExcursionAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +58,7 @@ public class ExcursionActivity extends AppCompatActivity {
         return null;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        executorService.shutdown();
-    }
+
 
     private void onEditExcursionClicked() {
     }
@@ -91,5 +89,11 @@ public class ExcursionActivity extends AppCompatActivity {
 
 
     private void onSaveExcursionClicked() {
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executorService.shutdown();
     }
 }
