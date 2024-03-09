@@ -1,22 +1,36 @@
 package com.example.conduit.activities;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Update;
 
 import com.example.conduit.R;
 import com.example.conduit.adapter.ExcursionAdapter;
+import com.example.conduit.broadcast.AlertInterceptor;
+import com.example.conduit.database.AppDatabase;
 import com.example.conduit.entities.Excursion;
 
-import java.util.Calendar;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-public class ExcursionActivity extends AppCompatActivity {
+public class ExcursionActivity extends AppCompatActivity implements ExcursionAdapter.OnExcursionListener {
     private RecyclerView recyclerView;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private ExcursionAdapter adapter;
 
     @Override
@@ -34,61 +48,100 @@ public class ExcursionActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadExcursions();
+        initViews();
     }
 
     private void initViews() {
         recyclerView = findViewById(R.id.recyclerViewExcursions);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new ExcursionAdapter(new ArrayList<>(), this);
+        recyclerView.setAdapter(adapter);
+
     }
 
     private void initEventHandlers() {
-        // Implement event handlers here
-    }
-
-    private void loadExcursions() {
-        // Implementation
+        Log.d("ExcursionActivity", "Init event handlers");
     }
 
     private void onDeleteExcursion(Excursion excursion) {
-        // Implementation
+        AppDatabase db = AppDatabase.getDatabase(this);
+        executorService.execute(() -> {
+            db.excursionDao().delete(excursion);
+            runOnUiThread(() -> loadExcursions());
+        });
     }
 
-    private Calendar parseExcursionDate(String dateString) {
-        // Implementation
-        return null;
+    private Calendar onParseExcursionDate(String dateString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        android.icu.util.Calendar calendar = android.icu.util.Calendar.getInstance();
+        try {
+            calendar.setTime(dateFormat.parse(dateString));
+        } catch (ParseException e) {
+            Toast.makeText(this, "Failed to parse date", Toast.LENGTH_SHORT).show();
+        }
+        return calendar;
     }
 
-
-
-    private void onEditExcursionClicked() {
+    @Override
+    public void onEditExcursionClicked(Excursion excursion) {
+        Intent intent = new Intent(this, UpdateExcursionActivity.class);
+        intent.putExtra("excursionId", excursion.getId());
+        intent.putExtra("vacationId", excursion.getVacationId());
+        startActivity(intent);
     }
 
-    private void onDeleteExcursionClicked() {
+    @Override
+    public void onDeleteExcursionClicked(Excursion excursion) {
+        AppDatabase db = AppDatabase.getDatabase(this);
+        executorService.execute(() -> {
+            db.excursionDao().delete(excursion);
+            runOnUiThread(this::loadExcursions);
+        });
     }
 
-    private void onDeleteExcursionCanceled() {
+    @Override
+    public void onSetExcursionAlertClicked(Excursion excursion) {
+        Calendar calendar = onParseExcursionDate(excursion.getDate());
+        Intent alertIntent = new Intent(this, AlertInterceptor.class);
+        alertIntent.putExtra("excursion_title", excursion.getTitle());
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this, excursion.getId(), alertIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            Toast.makeText(this, "Alert set for: " + excursion.getTitle(), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Error setting the alarm", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void onDeleteExcursionConfirmed() {
+    @Override
+    public void onSaveExcursionClicked(Excursion excursion) {
+        Intent intent = new Intent(this, UpdateExcursionActivity.class);
+        intent.putExtra("excursionId", excursion.getId());
+        startActivity(intent);
     }
 
-    private void onParseExcursionDate() {
-    }
+    private void loadExcursions() {
+        int vacationId = getIntent().getIntExtra("vacationId", -1);
+        if (vacationId == -1) {
+            Log.d("On Load excursions: ", "vacationId < 0");
+            return;
+        }
 
-    private void onParseExcursionDateFailed() {
-    }
+        executorService.execute(() -> {
+            AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
+            List<Excursion> excursions = db.excursionDao().getExcursionsForVacation(vacationId);
 
-    private void onDestroyExecutorService() {
-    }
+            excursions.sort(Comparator.comparing(Excursion::getDate));
 
-    private void onLoadExcursions() {
-    }
-
-    private void onSetExcursionAlertClicked() {
-    }
-
-
-    private void onSaveExcursionClicked() {
+            runOnUiThread(() -> {
+                adapter.setExcursions(excursions);
+            });
+        });
     }
 
     @Override

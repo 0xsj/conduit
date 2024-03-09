@@ -27,11 +27,9 @@ public interface ExcursionDao {
     void delete(Excursion excursion);
 
     @Query("SELECT * FROM excursions WHERE vacationId = :vacationId")
-    List<Excursion> getExcursionsForVacationSync(int vacationId);
+    List<Excursion> getExcursionsForVacation(int vacationId);
 
     @Query("SELECT * FROM excursions WHERE id = :excursionId")
     LiveData<Excursion> getExcursionById(int excursionId);
 
-    @Query("SELECT * FROM excursions WHERE id = :excursionId")
-    Excursion getExcursionByIdSync(int excursionId);
 }
