@@ -99,6 +99,7 @@ public class ExcursionActivity extends AppCompatActivity implements ExcursionAda
         });
     }
 
+    @SuppressLint("ScheduleExactAlarm")
     @Override
     public void onSetExcursionAlertClicked(Excursion excursion) {
         Calendar calendar = onParseExcursionDate(excursion.getDate());
