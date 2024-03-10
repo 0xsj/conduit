@@ -100,8 +100,8 @@ public class UpdateExcursionActivity extends AppCompatActivity {
             }
 
             if (!isDateWithinRange(date, vacation)) {
-                Toast.makeText(this, "Date is not within the vacation range.", Toast.LENGTH_SHORT).show();
-                Log.e("AddEditExcursionActivity", "Date is not within the vacation range.");
+                Toast.makeText(this, ERROR_DATE_NOT_IN_RANGE, Toast.LENGTH_SHORT).show();
+                Log.e("AddEditExcursionActivity", ERROR_DATE_NOT_IN_RANGE);
                 return;
             }
 
@@ -111,7 +111,7 @@ public class UpdateExcursionActivity extends AppCompatActivity {
 
     private void persistExcursion(String title, String date) {
         executor.execute(() -> {
-            Excursion excursionToSave = new Excursion(0, title, date, vacationId); // Assuming 0 for id since it's auto-generated
+            Excursion excursionToSave = new Excursion(0, title, date, vacationId);
             try {
                 if (currentExcursion == null) {
                     db.excursionDao().insert(excursionToSave);

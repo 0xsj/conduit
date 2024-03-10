@@ -45,11 +45,6 @@ public class AddVacationActivity extends AppCompatActivity {
         initViews();
         initEventHandlers();
 
-        // check db conn
-//        List<Vacation> vacations = db.vacationDao().getAllVacations();
-//        for (Vacation vacation : vacations) {
-//            Log.d("ViewVacations", "Vacation: " + vacation.getTitle() + ", Hotel: " + vacation.getHotel() + ", Start Date: " + vacation.getStartDate() + ", End Date: " + vacation.getEndDate());
-//        }
     }
 
     private void initViews() {

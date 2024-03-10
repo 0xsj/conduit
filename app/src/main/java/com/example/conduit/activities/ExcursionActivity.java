@@ -30,7 +30,6 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 public class ExcursionActivity extends AppCompatActivity implements ExcursionAdapter.OnExcursionListener {
-    private RecyclerView recyclerView;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private ExcursionAdapter adapter;
 
@@ -53,7 +52,7 @@ public class ExcursionActivity extends AppCompatActivity implements ExcursionAda
     }
 
     private void initViews() {
-        recyclerView = findViewById(R.id.recyclerViewExcursions);
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewExcursions);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ExcursionAdapter(new ArrayList<>(), this);
         recyclerView.setAdapter(adapter);
