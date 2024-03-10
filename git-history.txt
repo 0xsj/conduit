@@ -1,0 +1,125 @@
+commit 3adbc6c5f0553abf5f5a082bd60a51c9956d652b
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Sat Mar 9 17:31:54 2024 -0800
+
+    HOTFIX: refacctoring of live data object
+
+commit 05e3e7cc27bf2ba5dcf4c3e849f043788fe56f0b
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Sat Mar 9 17:09:23 2024 -0800
+
+    SUBMISSION PREP: clean out unused files, lint errors
+
+commit 07bef085c689f7f797fdd1d2d73932eb946db020
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Sat Mar 9 17:07:15 2024 -0800
+
+    B3 FIX: alert dialog prompt should show
+
+commit 5d019fb32a643d308f99579f838a944b9c37a0a7
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Sat Mar 9 15:55:05 2024 -0800
+
+    CHORE: add permissions, supress lint error - seems like non issue
+
+commit 8a607c053f57527b44f30642baed3a21bad0caa6
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Sat Mar 9 15:51:49 2024 -0800
+
+    STEP B4-5: Excursions Module. Wired to adapters, able to add, view, delete, set alarm for excursions
+
+commit c78a1e681889571e421e33cccf39fff6115d7d07
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Wed Mar 6 14:25:12 2024 -0800
+
+    STEP B3-g-pre: adapters for excursion with viewholder pattern
+
+commit 611a11c60b47649c85b61c348f53a7a6a8babba7
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Tue Mar 5 20:15:43 2024 -0800
+
+    STEP B3: VacationActivity created. user can share, delete, edit each vacation item
+
+commit 88518c58f3ab269f304008b699b4d0555cc265f4
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Tue Mar 5 20:13:56 2024 -0800
+
+    it works!
+
+commit 5268299d13964c5d53e2189e6276a6d07898cdd3
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Tue Mar 5 18:31:56 2024 -0800
+
+    STEP B-part3-pre: VacationAdapter, view holder pattern
+
+commit 4996e0342c521cb7ccd9c593edf1be91b68cfff6
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Tue Mar 5 17:05:24 2024 -0800
+
+    STEP B-part2-pre: check in, save point. updates to string.xml, new layout views for adapter
+
+commit ced0c5f27b6309aa8885efed9f0b830cb581f76c
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Tue Mar 5 14:44:04 2024 -0800
+
+    STEP B1a-b, B2, B3a-e: Vacation Add module - confirmation of saved vacation. user is able to add, simple validation checks added per specs, alerts interceptor module
+
+commit 117ed695d159d2694854c9e7ba44c49c36ee86ea
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Tue Mar 5 10:25:06 2024 -0800
+
+    DateTime util with logger
+
+commit ea1c37827556fa8cb14bb5c3590938f20bf4c422
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Mon Mar 4 14:43:08 2024 -0800
+
+    STEP B1-pre-3: DateTime utils, activities with placeholder methods for next step
+
+commit 0e37d92d1627f2a98b7c20a5de2f47774791dd2c
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Mon Mar 4 14:19:41 2024 -0800
+
+    STEP B1-pre-2: ExcursionActivity method mapping
+
+commit 40657a7370eff19ed20498ad105f0d66a7e5053a
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Mon Mar 4 14:12:47 2024 -0800
+
+    STEP B1-pre: initial methods mapped out, TODO: add utils for date convert, json marshal
+
+commit 16154319b2b7dceea215060d13e324aa91f907bd
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Mon Mar 4 13:50:08 2024 -0800
+
+    STEP C2: updates to UI, fixes in resource linking
+
+commit 50c444ae620fde26ac7bc147acdbd39abf0be992
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Mon Mar 4 12:43:08 2024 -0800
+
+    STEP C: added GUI for required layouts
+
+commit d4a953f6dd36b50fd93c9a3469d8055f183b245a
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Mon Mar 4 11:53:55 2024 -0800
+
+    STEP A: base DAO, Entities
+
+commit ead25390621af13d1127ef15e482f6e3469ebf93
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Mon Mar 4 11:12:02 2024 -0800
+
+    STEP A2: scaffolding, deps
+
+commit de3a0adb18f968cac937729d4c2848e7c631240d
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Mon Mar 4 10:38:36 2024 -0800
+
+    STEP A: Inital commit
+
+commit e3e46ef4f1bf051822ddf31b6c8f65f74f0d7a02
+Author: sjtommylee <sjtommylee@gmail.com>
+Date:   Mon Mar 4 09:52:10 2024 -0800
+
+    initial commit
