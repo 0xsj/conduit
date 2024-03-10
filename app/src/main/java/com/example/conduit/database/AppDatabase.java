@@ -12,7 +12,7 @@ import com.example.conduit.dao.VacationDao;
 import com.example.conduit.entities.Excursion;
 import com.example.conduit.entities.Vacation;
 
-@Database(entities = {Vacation.class, Excursion.class}, version = 2)
+@Database(entities = {Vacation.class, Excursion.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract VacationDao vacationDao();
     public abstract ExcursionDao excursionDao();
@@ -23,14 +23,11 @@ public abstract class AppDatabase extends RoomDatabase {
         if (DB_INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (DB_INSTANCE == null) {
-                    DB_INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "app_database").fallbackToDestructiveMigration().allowMainThreadQueries().build();
+                    DB_INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "vacation_database").build();
                     Log.d("AppDatabase", "Database connected successfully");
                 }
             }
         }
         return DB_INSTANCE;
     }
-
-
-
 }

@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -36,21 +37,19 @@ public class AddVacationActivity extends AppCompatActivity {
     private Vacation currentVacation;
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.vacation_add);
-        db = AppDatabase.getDatabase(getApplicationContext());
         initViews();
         initEventHandlers();
 
         // check db conn
-        List<Vacation> vacations = db.vacationDao().getAllVacations();
-        for (Vacation vacation : vacations) {
-            Log.d("ViewVacations", "Vacation: " + vacation.getTitle() + ", Hotel: " + vacation.getHotel() + ", Start Date: " + vacation.getStartDate() + ", End Date: " + vacation.getEndDate());
-        }
+//        List<Vacation> vacations = db.vacationDao().getAllVacations();
+//        for (Vacation vacation : vacations) {
+//            Log.d("ViewVacations", "Vacation: " + vacation.getTitle() + ", Hotel: " + vacation.getHotel() + ", Start Date: " + vacation.getStartDate() + ", End Date: " + vacation.getEndDate());
+//        }
     }
 
     private void initViews() {
@@ -176,6 +175,7 @@ public class AddVacationActivity extends AppCompatActivity {
         final String endDate = editEndDate.getText().toString();
 
         if (onValidateInput(title, hotel, startDate, endDate)) {
+            AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
             executor.execute(() -> {
                 if (currentVacation == null) {
                     currentVacation = new Vacation(0, title, hotel, startDate, endDate);
@@ -208,6 +208,7 @@ public class AddVacationActivity extends AppCompatActivity {
 
 
     private void onLoadVacationDetails(int vacationId) {
+        AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
         executor.execute(() -> {
             db.vacationDao().getVacationByIdAsync(vacationId).observe(this, vacation -> {
                 if (vacation != null) {
@@ -239,4 +240,12 @@ public class AddVacationActivity extends AppCompatActivity {
             return false;
         }
     }
+
+    public void clearFields(View view) {
+        editTitle.getText().clear();
+        editHotel.getText().clear();
+        editStartDate.getText().clear();
+        editEndDate.getText().clear();
+    }
+
 }

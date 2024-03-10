@@ -55,6 +55,7 @@ public class VacationActivity extends AppCompatActivity implements VacationAdapt
                 .setPositiveButton("Yes", (dialog, which) -> onEditVacation(vacation))
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .create();
+        alertDialog.show();
     }
 
     private void onEditVacation(Vacation vacation) {
@@ -99,6 +100,9 @@ public class VacationActivity extends AppCompatActivity implements VacationAdapt
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);
         sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
     }
 
     protected void onDestroy() {

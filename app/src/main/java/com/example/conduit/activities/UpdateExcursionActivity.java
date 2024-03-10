@@ -3,6 +3,7 @@ package com.example.conduit.activities;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import com.example.conduit.database.AppDatabase;
 import com.example.conduit.entities.Excursion;
 import com.example.conduit.entities.Vacation;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -83,18 +85,28 @@ public class UpdateExcursionActivity extends AppCompatActivity {
     private void saveOrUpdateExcursion() {
         String title = editExcursionTitle.getText().toString();
         String date = editExcrusionDate.getText().toString();
+        Log.d("AddEditExcursionActivity", "Attempting to save or update excursion");
 
         if (!isValidDate(date)) {
             showErrorMessage(ERROR_INVALID_DATE_FORMAT);
             return;
         }
 
-        if (!isDateWithinRange(date)) {
-            showErrorMessage(ERROR_DATE_NOT_IN_RANGE);
-            return;
-        }
+        db.vacationDao().getVacationByIdAsync(vacationId).observe(this, vacation -> {
+            if (vacation == null) {
+                Toast.makeText(this, "Vacation not found.", Toast.LENGTH_SHORT).show();
+                Log.e("AddEditExcursionActivity", "Vacation not found for ID: " + vacationId);
+                return;
+            }
 
-        persistExcursion(title, date);
+            if (!isDateWithinRange(date, vacation)) {
+                Toast.makeText(this, "Date is not within the vacation range.", Toast.LENGTH_SHORT).show();
+                Log.e("AddEditExcursionActivity", "Date is not within the vacation range.");
+                return;
+            }
+
+            persistExcursion(title, date);
+        });
     }
 
     private void persistExcursion(String title, String date) {
@@ -124,9 +136,17 @@ public class UpdateExcursionActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isDateWithinRange(String dateString) {
-        // Implement date range validation logic here
-        return true; // Placeholder
+    private boolean isDateWithinRange(String dateString, Vacation vacation) {
+        try {
+            android.icu.text.SimpleDateFormat dateFormat = new android.icu.text.SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+            Date excursionDate = dateFormat.parse(dateString);
+            Date vacationStart = dateFormat.parse(vacation.getStartDate());
+            Date vacationEnd = dateFormat.parse(vacation.getEndDate());
+
+            return excursionDate != null && !excursionDate.before(vacationStart) && !excursionDate.after(vacationEnd);
+        } catch (ParseException e) {
+            return false;
+        }
     }
 
     private void showDatePickerDialog(EditText editText) {
