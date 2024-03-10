@@ -23,7 +23,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if (DB_INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (DB_INSTANCE == null) {
-                    DB_INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "vacation_database").build();
+                    DB_INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "D308").build();
                     Log.d("AppDatabase", "Database connected successfully");
                 }
             }

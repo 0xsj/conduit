@@ -171,30 +171,33 @@ public class AddVacationActivity extends AppCompatActivity {
 
         if (onValidateInput(title, hotel, startDate, endDate)) {
             AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
-            executor.execute(() -> {
-                if (currentVacation == null) {
-                    currentVacation = new Vacation(0, title, hotel, startDate, endDate);
+
+            if (currentVacation == null) {
+                currentVacation = new Vacation(0, title, hotel, startDate, endDate);
+                executor.execute(() -> {
                     long result = db.vacationDao().insert(currentVacation);
                     if (result != -1) {
                         Log.d("Insertion", "Vacation inserted successfully with id: " + result);
-                        onShowSaveSuccess();
+                        runOnUiThread(this::onShowSaveSuccess);
                     } else {
                         Log.d("Insertion", "Failed to insert vacation");
                     }
-                } else {
-                    currentVacation.setTitle(title);
-                    currentVacation.setHotel(hotel);
-                    currentVacation.setStartDate(startDate);
-                    currentVacation.setEndDate(endDate);
+                });
+            } else {
+                currentVacation.setTitle(title);
+                currentVacation.setHotel(hotel);
+                currentVacation.setStartDate(startDate);
+                currentVacation.setEndDate(endDate);
+                executor.execute(() -> {
                     int result = db.vacationDao().update(currentVacation);
                     if (result > 0) {
                         Log.d("Update", "Vacation updated successfully");
-                        onShowSaveSuccess();
+                        runOnUiThread(this::onShowSaveSuccess);
                     } else {
                         Log.d("Update", "Failed to update vacation");
                     }
-                }
-            });
+                });
+            }
         } else {
             onShowValidationError();
         }
@@ -202,20 +205,20 @@ public class AddVacationActivity extends AppCompatActivity {
 
 
 
+
     private void onLoadVacationDetails(int vacationId) {
         AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
-        executor.execute(() -> {
-            db.vacationDao().getVacationByIdAsync(vacationId).observe(this, vacation -> {
-                if (vacation != null) {
-                    runOnUiThread(() -> {
-                        onUpdateUIVacationDetails(vacation);
-                    });
-                } else {
-                    Toast.makeText(AddVacationActivity.this, "Vacation not found.", Toast.LENGTH_SHORT).show();
-                }
-            });
+        db.vacationDao().getVacationByIdAsync(vacationId).observe(this, vacation -> {
+            if (vacation != null) {
+                runOnUiThread(() -> {
+                    onUpdateUIVacationDetails(vacation);
+                });
+            } else {
+                Toast.makeText(AddVacationActivity.this, "Vacation not found.", Toast.LENGTH_SHORT).show();
+            }
         });
     }
+
 
     private boolean onValidateInput(String title, String hotel, String startDate, String endDate) {
         if (title.isEmpty() || hotel.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
