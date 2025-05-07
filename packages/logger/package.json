@@ -1,0 +1,19 @@
+{
+  "name": "@traces-platform/logger",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src --ext .ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "pino": "^8.14.1",
+    "pino-pretty": "^10.0.0"
+  },
+  "devDependencies": {
+    "@traces-platform/typescript-config": "*"
+  }
+}

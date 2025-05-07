@@ -1,0 +1,13 @@
+{
+  "extends": "../../packages/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@traces-platform/*": ["../../packages/*/src"]
+    }
+  },
+  "include": ["src"],
+  "references": [{ "path": "../../packages/logger" }]
+}
