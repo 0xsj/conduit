@@ -1,0 +1,57 @@
+# Rust build artifacts
+/target
+**/target
+
+# Cargo lock file (include this for applications, comment this out for libraries)
+Cargo.lock
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Log files
+*.log
+logs/
+
+# Docker volumes
+data/
+
+# Build outputs
+dist/
+out/
+
+# Dependencies
+node_modules/
+
+# Test coverage
+coverage/
+
+# Compiled binary files
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Generated documentation
+/doc
+**/doc
+
+# Local development configuration
+/local-config/
+**/.local/
+
+# Temporary files
+*.tmp
+*.bak
+.temp/
+.tmp/
+tmp/
