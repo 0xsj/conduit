@@ -27,11 +27,11 @@ pub struct DI {
 }
 
 impl DI {
-    pub async fn new_in_memory() -> Result<Self, String> {
+    pub async fn new_in_memory() -> Result<Self, AppError> {
         unimplemented!("In-memory DI not yet implemented")
     }
 
-    pub async fn new_with_mysql(db_url: &str) -> Result<Self, String> {
+    pub async fn new_with_mysql(db_url: &str) -> Result<Self, AppError> {
         unimplemented!("MySQL DI not yet implemented")
     } 
 
@@ -47,4 +47,23 @@ impl DI {
         self.services.rabbitmq_client = Some(rabbitmq_client);
         Ok(self)
     }
+}
+
+
+pub async fn get_services() -> Result<AppServices, AppError> {
+    let db_url = std::env::var("DATABASE_URL").unwrap_or_else(|_| "mysql://user:pass@localhost/db".to_string());
+    let redis_url = std::env::var("REDIS_URL").ok();
+    let rabbitmq_url = std::env::var("RABBITMQ_URL").ok();
+    
+    let mut di = DI::new_in_memory().await?;
+    
+    if let Some(redis_url) = redis_url {
+        di = di.with_redis(&redis_url).await?;
+    }
+    
+    if let Some(rabbitmq_url) = rabbitmq_url {
+        di = di.with_rabbitmq(&rabbitmq_url).await?;
+    }
+    
+    Ok(di.services)
 }
