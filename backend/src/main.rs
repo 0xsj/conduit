@@ -2,6 +2,7 @@ mod adapters;
 mod config;
 mod domain;
 mod ports;
+mod error;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
