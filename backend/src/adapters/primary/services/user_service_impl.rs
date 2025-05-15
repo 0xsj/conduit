@@ -3,11 +3,18 @@ use std::sync::Arc;
 
 use crate::domain::user::User;
 use crate::ports::primary::user_service::UserService;
-use crate::ports::secondary::user_repository::UserRepository;
+use crate::ports::secondary::user_repository::{self, UserRepository};
 
 pub struct UserServiceImpl {
     user_repository: Arc<dyn UserRepository + Send + Sync>,
 }
+
+impl UserServiceImpl {
+    pub fn new(user_repository: Arc<dyn UserRepository + Send + Sync>) -> Self {
+        Self { user_repository }
+    }
+}
+
 
 #[async_trait]
 impl UserService for UserServiceImpl {
