@@ -49,3 +49,36 @@ docker-dev:
 clean:
 	cargo clean
 	docker-compose down -v
+
+docker-up:
+	docker-compose up -d
+
+# Stop all Docker services
+docker-down:
+	docker-compose down
+
+# Start a specific service
+docker-up-%:
+	docker-compose up -d $*
+
+# Restart a specific service
+docker-restart-%:
+	docker-compose restart $*
+
+# View logs for a specific service
+docker-logs-%:
+	docker-compose logs -f $*
+
+# Reset database (removes all data)
+docker-reset-db:
+	docker-compose down -v mysql
+	docker-compose up -d mysql
+
+# Run migrations using SQLx CLI
+db-migrate:
+	sqlx migrate run
+
+# Create a new migration
+db-new-migration:
+	@read -p "Migration name: " name; \
+	sqlx migrate add -r $$name
