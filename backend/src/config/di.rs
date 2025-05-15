@@ -1,5 +1,6 @@
 use std::sync::Arc;
 use crate::error::{AppError, AppResult};
+use dotenv::dotenv;
 
 use crate::ports::primary::{UserService, AuthService};
 use crate::ports::secondary::{UserRepository, AuthRepository};
