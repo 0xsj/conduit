@@ -1,15 +1,12 @@
 use axum::{
-    extract::{Path, Json},
-    http::StatusCode,
+    extract::{Json, Path},
+    http::StatusCode, Extension,
 };
 use serde::{Deserialize, Serialize};
-use std::sync::Mutex;
-use once_cell::sync::Lazy;
+use std::sync::Arc;
 
+use crate::ports::primary::user_service::UserService;
 use crate::domain::user::User;
-
-// Thread-safe storage using once_cell and Mutex
-static USERS: Lazy<Mutex<Vec<User>>> = Lazy::new(|| Mutex::new(Vec::new()));
 
 #[derive(Deserialize)]
 pub struct CreateUserRequest {
@@ -29,48 +26,43 @@ impl From<User> for UserResponse {
         Self {
             id: user.id.clone(),
             username: user.username.clone(),
-            email: user.email.clone(),
+            email: user.email.clone()
         }
     }
 }
 
 pub async fn create_user(
+    Extension(service): Extension<Arc<dyn UserService + Send + Sync>>,
     Json(payload): Json<CreateUserRequest>,
 ) -> Result<Json<UserResponse>, StatusCode> {
-    // Create a new user
-    let user = User::new(payload.username, payload.email);
-    
-    // Store user
-    let mut users = USERS.lock().map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
-    users.push(user.clone());
-    
-    // Return user data
-    Ok(Json(UserResponse::from(user)))
-}
-
-pub async fn get_user(
-    Path(id): Path<String>,
-) -> Result<Json<UserResponse>, StatusCode> {
-    // Find user by ID
-    let users = USERS.lock().map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
-    let user = users.iter()
-        .find(|u| u.id == id)
-        .cloned();
-    
-    // Return user or 404
-    match user {
-        Some(user) => Ok(Json(UserResponse::from(user))),
-        None => Err(StatusCode::NOT_FOUND),
+    match service.create_user(payload.username, payload.email).await {
+        Ok(user) => Ok(Json(UserResponse::from(user))),
+        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
     }
 }
 
-pub async fn list_users() -> Result<Json<Vec<UserResponse>>, StatusCode> {
-    // Get all users
-    let users = USERS.lock().map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
-    let user_responses: Vec<UserResponse> = users.iter()
-        .cloned()
-        .map(UserResponse::from)
-        .collect();
-    
-    Ok(Json(user_responses))
+pub async fn get_user(
+    Extension(service): Extension<Arc<dyn UserService + Send + Sync>>,
+    Path(id): Path<String>,
+) -> Result<Json<UserResponse>, StatusCode> {
+    match service.get_user(&id).await {
+        Ok(Some(user)) => Ok(Json(UserResponse::from(user))),
+        Ok(None) => Err(StatusCode::NOT_FOUND),
+        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR)
+    }
+}
+
+pub async fn list_users(
+    Extension(service): Extension<Arc<dyn UserService + Send + Sync>>,
+
+) -> Result<Json<Vec<UserResponse>>, StatusCode> {
+    match service.list_users().await {
+        Ok(users) => {
+            let user_responses = users.into_iter()
+                .map(UserResponse::from)
+                .collect();
+            Ok(Json(user_responses))
+        },
+        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR)
+    }
 }

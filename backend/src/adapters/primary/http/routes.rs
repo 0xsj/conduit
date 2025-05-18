@@ -5,10 +5,12 @@ use axum::{
 use std::net::SocketAddr;
 use tower_http::cors::{Any, CorsLayer};
 
-use crate::config::app::AppConfig;
+use crate::config::{app::AppConfig, di::AppServices};
 use crate::adapters::primary::http::{user_handler, auth_handler};
 
 pub async fn start_server(config: AppConfig) -> Result<(), Box<dyn std::error::Error>> {
+
+
     // Enable CORS
     let cors = CorsLayer::new()
         .allow_origin(Any)
