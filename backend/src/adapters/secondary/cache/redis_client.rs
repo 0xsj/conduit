@@ -1,14 +1,17 @@
 // backend/src/adapters/secondary/cache/redis_client.rs
 use std::time::Duration;
+use std::sync::Arc;
 
+#[derive(Clone)]
 pub struct RedisClient {
-    client: redis::Client,
+    // Wrap in Arc to ensure it can be cloned
+    client: Arc<redis::Client>,
 }
 
 impl RedisClient {
     pub fn new(redis_url: &str) -> Result<Self, redis::RedisError> {
         let client = redis::Client::open(redis_url)?;
-        Ok(Self { client })
+        Ok(Self { client: Arc::new(client) })
     }
     
     pub async fn get<T: serde::de::DeserializeOwned>(&self, key: &str) -> Result<Option<T>, String> {
