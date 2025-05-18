@@ -1,11 +1,12 @@
 use axum::{
-    extract::Json,
-    http::StatusCode,
+    extract::{Extension, Json},
+    http::StatusCode
 };
-use serde::{Deserialize, Serialize};
-use chrono::{Utc, Duration};
 
-use crate::domain::auth::{Credentials, AuthToken};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+use crate::domain::auth::{AuthToken, Credentials};
+use crate::ports::primary::auth_service::AuthService;
 
 #[derive(Deserialize)]
 pub struct LoginRequest {
@@ -19,29 +20,37 @@ pub struct TokenResponse {
     expires_at: String,
 }
 
-// Hardcoded credentials for demo
-const DEMO_USERNAME: &str = "demo";
-const DEMO_PASSWORD: &str = "password";
-
-pub async fn login(
-    Json(payload): Json<LoginRequest>,
-) -> Result<Json<TokenResponse>, StatusCode> {
-    // Check if credentials are valid
-    if payload.username == DEMO_USERNAME && payload.password == DEMO_PASSWORD {
-        // Generate a simple token (in a real app, use JWT)
-        let now = Utc::now();
-        let expires_at = now + Duration::hours(1);
-        
-        let token = AuthToken {
-            token: format!("demo-token-{}", now.timestamp()),
-            expires_at: expires_at.to_rfc3339(),
-        };
-        
-        Ok(Json(TokenResponse {
+impl From<AuthToken> for TokenResponse {
+    fn from(token: AuthToken) -> Self {
+        Self {
             token: token.token,
             expires_at: token.expires_at,
-        }))
-    } else {
-        Err(StatusCode::UNAUTHORIZED)
+        }
+    }
+}
+
+pub async fn login(
+    Extension(service): Extension<Arc<dyn AuthService + Send + Sync>>,
+    Json(payload): Json<LoginRequest>,
+) -> Result<Json<TokenResponse>, StatusCode> {
+    let credentials = Credentials {
+        username: payload.username,
+        password: payload.password
+    };
+
+    match service.login(credentials).await {
+        Ok(token) => Ok(Json(TokenResponse::from(token))),
+        Err(_) => Err(StatusCode::UNAUTHORIZED)
+    }
+}
+
+pub async fn validate_token(
+    Extension(service): Extension<Arc<dyn AuthService + Send + Sync>>,
+    Json(token): Json<String>,
+) -> Result<StatusCode, StatusCode> {
+    match service.validate_token(&token).await {
+        Ok(true) => Ok(StatusCode::OK),
+        Ok(false) => Err(StatusCode::UNAUTHORIZED),
+        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR)
     }
 }
