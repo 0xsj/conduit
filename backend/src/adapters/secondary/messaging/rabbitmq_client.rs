@@ -1,3 +1,4 @@
+// backend/src/adapters/secondary/messaging/rabbitmq_client.rs
 use lapin::{
     Connection, ConnectionProperties,
     options::{BasicPublishOptions, BasicConsumeOptions, QueueDeclareOptions},
@@ -7,17 +8,21 @@ use lapin::{
 use std::sync::Arc;
 use futures_lite::stream::StreamExt;
 
+#[derive(Clone)]
 pub struct RabbitMQClient {
-    connection: Connection,
+    // Wrap the connection in an Arc to make it cloneable
+    connection: Arc<Connection>,
 }
 
 impl RabbitMQClient {
     pub async fn new(amqp_url: &str) -> Result<Self, lapin::Error> {
         let connection = Connection::connect(amqp_url, ConnectionProperties::default()).await?;
-        Ok(Self { connection })
+        // Wrap the connection in an Arc
+        Ok(Self { connection: Arc::new(connection) })
     }
 
     pub async fn publish(&self, queue_name: &str, payload: &[u8]) -> Result<(), String> {
+        // Use methods on the Arc-wrapped connection
         let channel = self.connection.create_channel().await.map_err(|e| e.to_string())?;
         
         // Declare queue
